@@ -1,22 +1,17 @@
 const router = require('express')
   .Router();
-const { celebrate } = require('celebrate');
 const {
   getMovies,
   createMovie,
   deleteMovie,
 } = require('../controllers/movies');
 const {
-  movieSchema,
-  idSchema,
-} = require('../models/movieJoi');
+  movieValidator,
+  idValidator,
+} = require('../utils/validation');
 
 router.get('/', getMovies);
-router.post('/', celebrate({
-  body: movieSchema,
-}), createMovie);
-router.delete('/:id', celebrate({
-  body: idSchema,
-}), deleteMovie);
+router.post('/', movieValidator, createMovie);
+router.delete('/:id', idValidator, deleteMovie);
 
 module.exports = router;
