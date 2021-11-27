@@ -69,11 +69,13 @@ module.exports.userInfoSchema = Joi.object()
         'string.email': EMAIL_MSG,
       }),
     name: Joi.string()
+      .required()
       .min(2)
       .max(30)
       .messages({
         'string.empty': EMPTY_STR_MSG,
         'string.min': MIN_STR,
         'string.max': MAX_STR,
+        'any.required': REQ_MSG,
       }),
   });

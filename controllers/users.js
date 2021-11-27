@@ -40,14 +40,14 @@ module.exports.createUser = (req, res, next) => {
 module.exports.updateUser = (req, res, next) => {
   const {
     name,
-    about,
+    email,
   } = req.body;
 
   User.findByIdAndUpdate(
     req.user,
     {
       name,
-      about,
+      email,
     },
     {
       new: true,

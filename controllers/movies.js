@@ -2,7 +2,10 @@ const Movie = require('../models/movie');
 const NotFoundError = require('../errors/not-found-err');
 const ForbiddenError = require('../errors/forbidden-err');
 
-const { MOVIE_NOT_FOUND, OWNER_ERR_MSG } = require('../constants');
+const {
+  MOVIE_NOT_FOUND,
+  OWNER_ERR_MSG,
+} = require('../constants');
 
 module.exports.getMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
@@ -55,8 +58,8 @@ module.exports.deleteMovie = (req, res, next) => {
         return Promise.reject(new ForbiddenError(OWNER_ERR_MSG));
       }
 
-      return Movie.findByIdAndRemove(req.params.id);
+      return movie.deleteOne()
+        .then(() => res.send({ data: movie }));
     })
-    .then((movie) => res.send({ data: movie }))
     .catch(next);
 };
