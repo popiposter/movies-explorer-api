@@ -10,6 +10,7 @@ const {
 } = process.env;
 
 module.exports.config = {
+  env: NODE_ENV,
   port: parseInt(PORT, 10) || 3000,
   databaseUrl: NODE_ENV === 'production' ? MONGODB_URI : 'mongodb://localhost:27017/moviesdb',
   jwtSecret: NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
