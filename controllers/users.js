@@ -95,16 +95,24 @@ module.exports.login = (req, res, next) => {
         httpOnly: true,
         sameSite: 'none',
         secure: true,
-      })
-        .send({
-          data: {
-            about: user.about,
-            avatar: user.avatar,
-            email: user.email,
-            name: user.name,
-            _id: user._id,
-          },
-        });
+      });
+
+      res.cookie('isTokenSet', true, {
+        maxAge: 3600000 * 24 * 7,
+        httpOnly: false,
+        sameSite: 'none',
+        secure: true,
+      });
+
+      res.send({
+        data: {
+          about: user.about,
+          avatar: user.avatar,
+          email: user.email,
+          name: user.name,
+          _id: user._id,
+        },
+      });
     })
     .catch(next);
 };
