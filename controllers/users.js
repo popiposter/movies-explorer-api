@@ -8,7 +8,7 @@ const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
 
 const secureCookie = config.env !== 'development';
-const sameSiteCookie = config.env === 'development';
+const sameSiteCookie = config.env === 'development' ? true : 'none';
 
 const {
   NOT_FOUND_MSG,
