@@ -1,7 +1,7 @@
 const allowedCors = [
   'http://localhost',
   'http://localhost:3000',
-  'https:front.diploma.as.nomoredomains.rocks',
+  'https://front.diploma.as.nomoredomains.rocks',
 ];
 const DEFAULT_ALLOWED_METHODS = 'GET,HEAD,PUT,PATCH,POST,DELETE';
 

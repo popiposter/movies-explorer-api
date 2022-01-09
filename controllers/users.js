@@ -8,6 +8,7 @@ const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
 
 const secureCookie = config.env !== 'development';
+const sameSiteCookie = config.env === 'development';
 
 const {
   NOT_FOUND_MSG,
@@ -63,7 +64,13 @@ module.exports.updateUser = (req, res, next) => {
       }
       return res.send({ data: user });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'MongoServerError' && err.code === 11000) {
+        next(new ConflictError(CONFLICT_MSG));
+      } else {
+        next(err);
+      }
+    });
 };
 
 module.exports.getCurrentUserInfo = (req, res, next) => {
@@ -95,14 +102,14 @@ module.exports.login = (req, res, next) => {
       res.cookie('token', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
-        sameSite: 'none',
+        sameSite: sameSiteCookie,
         secure: secureCookie,
       });
 
       res.cookie('isTokenSet', true, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: false,
-        sameSite: 'none',
+        sameSite: sameSiteCookie,
         secure: secureCookie,
       });
 
@@ -122,12 +129,12 @@ module.exports.login = (req, res, next) => {
 module.exports.logout = (req, res) => {
   res.clearCookie('token', {
     httpOnly: false,
-    sameSite: 'none',
+    sameSite: sameSiteCookie,
     secure: secureCookie,
   });
   res.clearCookie('isTokenSet', {
     httpOnly: false,
-    sameSite: 'none',
+    sameSite: sameSiteCookie,
     secure: secureCookie,
   });
   res.json({ message: LOGOUT_MSG })
