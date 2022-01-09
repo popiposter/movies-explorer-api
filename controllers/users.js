@@ -8,7 +8,6 @@ const NotFoundError = require('../errors/not-found-err');
 const ConflictError = require('../errors/conflict-err');
 
 const secureCookie = config.env !== 'development';
-const sameSiteCookie = config.env === 'development' ? true : 'none';
 
 const {
   NOT_FOUND_MSG,
@@ -102,14 +101,7 @@ module.exports.login = (req, res, next) => {
       res.cookie('token', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
-        sameSite: sameSiteCookie,
-        secure: secureCookie,
-      });
-
-      res.cookie('isTokenSet', true, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: false,
-        sameSite: sameSiteCookie,
+        sameSite: true,
         secure: secureCookie,
       });
 
@@ -128,15 +120,11 @@ module.exports.login = (req, res, next) => {
 
 module.exports.logout = (req, res) => {
   res.clearCookie('token', {
-    httpOnly: false,
-    sameSite: sameSiteCookie,
+    httpOnly: true,
+    sameSite: true,
     secure: secureCookie,
   });
-  res.clearCookie('isTokenSet', {
-    httpOnly: false,
-    sameSite: sameSiteCookie,
-    secure: secureCookie,
-  });
+
   res.json({ message: LOGOUT_MSG })
     .end();
 };
